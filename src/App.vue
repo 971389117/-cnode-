@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <Header/>
-    <PostList/>
+    <div class="main">
+    <router-view name='main'></router-view>
+    <router-view name='slidebar'></router-view>
+    </div>
   </div>
 </template>
 
@@ -22,5 +25,10 @@ export default {
 *{padding: 0;margin: 0;box-sizing: border-box}
 body{
   background: #e1e1e1;
+}
+.main{
+  display: flex;
+  justify-content: center;
+  margin: auto;
 }
 </style>

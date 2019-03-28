@@ -14,30 +14,37 @@
       <div class="panel-inner">
         <div v-for="post in posts" :key='post.id' class="cell">
           <router-link class="title-avatar" :to='{
-              name:"abc",
-              params:{}
+              name:"user_info",
+              params:{author:post.author.loginname}
             }'>
             <img :src="post.author.avatar_url" alt="">
           </router-link>
           <span class="counts"> {{post.reply_count}} / {{post.visit_count}}</span>
+          <span class="tab">{{post | formatData}}</span>
           <router-link class="title" :to='{
-              name:"abc",
-              params:{}
+              name:"topic",
+              params:{
+                id:post.id,
+                name:post.author.loginname
+              }
             }'>
             {{post.title}}
              </router-link>
-            <router-link class="title-date" :to='{
-              name:"abc",
+            <!-- <router-link class="title-date" :to='{
+              name:"user_info",
               params:{}
             }'>
             {{ post.last_reply_at | formatDate}}
-             </router-link>
+             </router-link> -->
         </div>
+      <Pagination @jumpPage='getTopic'/>
       </div>
     </div>
+
   </div>
 </template>
 <script>
+import Pagination from './Pagination'
   export default {
     name: "PostList",
     data() {
@@ -46,20 +53,22 @@
         posts: [],
       };
     },
+    components:{
+      Pagination
+    },
     methods: {
-      getTopic() {
-        this.$http.get(this.base_url + '/topics', {
-            params: {
-              limit: 20,
-              page: 1
-            }
-          })
+      getTopic(page=1) {
+        // this.$http.get(this.base_url + `/topics/?page=${page}`)
+        this.$http.get(this.base_url + `/topics/`,{params:{page:page}})
           .then(res => {
             this.posts = res.data.data
             console.log(this.posts)
           }).catch(err => {
             console.log(err)
           })
+      },
+      requestPage(page){
+        this.getTopic(page)
       }
     },
     beforeMount() {
@@ -79,7 +88,9 @@
 .panel{
   box-shadow: 0 0 4px rgba(0, 0, 0, .24)
 }
-
+.Pagination{
+  background: #fff;
+}
 img{width: 30px;height: 30px;}
 a{text-decoration: none;color: #333}
 .cell{

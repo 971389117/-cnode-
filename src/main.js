@@ -7,6 +7,17 @@ import Axios from 'axios'
 Vue.prototype.$http=Axios
 Vue.config.productionTip = false
 
+Vue.filter('formatData',post=>{
+  if(post.top){
+    return '置顶'
+  }else if(post.good){
+    return '精华'
+  }else if(post.tab==='share'){
+    return '共享'
+  }else if(post.tab==='ask'){
+    return '问答'
+  }
+})
 Vue.filter('formatDate', str=>{
   let date=new Date(str)
   let currentDate=new Date()
